@@ -1,0 +1,15 @@
+[
+["index.html", "Data Wrangling with R Welcome", " Data Wrangling with R Aravind Hebbali Welcome "],
+["intro.html", "Chapter 1 Introduction", " Chapter 1 Introduction "],
+["import1.html", "Chapter 2 Import Data - 1", " Chapter 2 Import Data - 1 "],
+["import2.html", "Chapter 3 Import Data - 2", " Chapter 3 Import Data - 2 "],
+["dplyr1.html", "Chapter 4 Data Wrangling - 1", " Chapter 4 Data Wrangling - 1 "],
+["dplyr2.html", "Chapter 5 Data Wrangling - 2", " Chapter 5 Data Wrangling - 2 "],
+["dplyr3.html", "Chapter 6 Data Wrangling - 3", " Chapter 6 Data Wrangling - 3 "],
+["pipes.html", "Chapter 7 Pipes", " Chapter 7 Pipes "],
+["tibbles.html", "Chapter 8 tibbles", " Chapter 8 tibbles "],
+["stringr.html", "Chapter 9 Handling String Data", " Chapter 9 Handling String Data "],
+["lubridate.html", "Chapter 10 Working with Date &amp; Time", " Chapter 10 Working with Date &amp; Time "],
+["forcats.html", "Chapter 11 Categorical Data Analysis", " Chapter 11 Categorical Data Analysis "],
+["references.html", "References", " References "]
+]
