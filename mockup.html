@@ -9,6 +9,8 @@
 :root{--ink:#0f172a;--muted:#475569;--bg:#f8fafc;--card:#fff;--line:#e2e8f0;--accent:#ea580c;--radius:14px;--max:1120px}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
 a{color:#0369a1}.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[hidden]{display:none!important}
 nav.top{position:sticky;top:0;z-index:10;background:#0f172a;color:#fff;border-bottom:1px solid #1e293b}
 nav.top .wrap{display:flex;align-items:center;gap:18px;padding:12px 20px}
 .brand{font-weight:800;letter-spacing:.02em}.brand small{font-weight:400;color:#cbd5e1}
@@ -29,6 +31,10 @@ section{padding:34px 0}h2{font-family:Georgia,serif;font-size:26px;margin:0 0 6p
 .win{color:#57534e}
 .comp{background:#fffbeb;border:1px dashed #f59e0b;border-radius:var(--radius);padding:14px}.comp.deep{background:#ecfeff;border-color:#06b6d4}
 .pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;background:#e0f2fe;color:#075985;margin-right:6px}.pill.beg{background:#dcfce7;color:#166534}.pill.int{background:#fef9c3;color:#854d0e}
+.filter{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 18px}
+.filter input[type=search]{flex:1 1 320px;min-width:0;padding:11px 14px;font:inherit;font-size:15px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:var(--ink)}
+.filter input[type=search]:focus-visible{outline:3px solid #fdba74;outline-offset:1px;border-color:var(--accent)}
+.count{font-size:13px;color:var(--muted);margin:0;white-space:nowrap}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}@media(max-width:960px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s ease,box-shadow .15s ease}
 .card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(2,6,23,.12)}
@@ -93,6 +99,12 @@ footer{padding:26px 0 40px;color:#64748b;font-size:13px}footer a{color:#475569}
 <section id="library"><div class="wrap">
 <h2>The library</h2>
 <p class="lede">Every cover below is a new <b>Rsquared Library</b> SVG concept — duotone, Title Case serif, author-first, no stock laptop. Chapter counts and tables of contents are taken from each book’s own table of contents. PDF and ePub buttons appear only where a build has been verified.</p>
+<div class="filter">
+<label class="sr" for="q">Filter books by title, topic or chapter</label>
+<input id="q" type="search" placeholder="Filter books — try “pipe”, “facets”, “permissions”, “joins”…" autocomplete="off">
+<p class="count" id="count" role="status" aria-live="polite">All 6 books</p>
+</div>
+
 <div class="grid">
 
 <!-- CARD 01 -->
@@ -160,6 +172,35 @@ footer{padding:26px 0 40px;color:#64748b;font-size:13px}footer a{color:#475569}
 <section><div class="wrap"><div class="licensebox"><b>License &amp; feedback.</b> All six books are open educational resources under <b>CC BY-NC-SA 4.0</b> — free to read online and to share with attribution, non-commercially. Three titles (Data Wrangling, ggplot2, Base R) also offer a verified PDF and ePub download; the other three are online-only for now, and no button is shown for them. Found a typo? Open an issue on the book’s GitHub repository or write to <a href="mailto:books@rsquaredacademy.com">books@rsquaredacademy.com</a>. </div></div></section>
 
 <footer><div class="wrap">MOCKUP preview • Rsquared Academy open textbooks by <a href="https://www.aravindhebbali.com">Aravind Hebbali</a> • © 2014–<span id="y">2026</span> • Live books: <a href="https://intro-r.rsquaredacademy.com/">Intro</a> · <a href="https://wrangle-r.rsquaredacademy.com/">Wrangle</a> · <a href="https://viz-ggplot2.rsquaredacademy.com/">ggplot2</a> · <a href="https://viz-base.rsquaredacademy.com/">Base</a> · <a href="https://rdbsql.rsquaredacademy.com/">SQL</a> · <a href="https://bash-intro.rsquaredacademy.com/">Bash</a></div></footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+(function () {
+  var q = document.getElementById('q');
+  var count = document.getElementById('count');
+  var cards = [].slice.call(document.querySelectorAll('.card'));
+  var total = cards.length;
+
+  function run() {
+    var t = q.value.trim().toLowerCase();
+    var hits = 0;
+    cards.forEach(function (card) {
+      // textContent includes the collapsed <details> TOC, so chapters are searchable
+      var ok = !t || card.textContent.toLowerCase().indexOf(t) !== -1;
+      card.hidden = !ok;
+      if (ok) { hits++; }
+    });
+    count.textContent = hits === total
+      ? 'All ' + total + ' books'
+      : hits + ' of ' + total + ' books match “' + q.value.trim() + '”';
+  }
+
+  q.addEventListener('input', run);
+  q.addEventListener('search', run);
+  q.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { q.value = ''; run(); }
+  });
+})();
+</script>
 </body>
 </html>
