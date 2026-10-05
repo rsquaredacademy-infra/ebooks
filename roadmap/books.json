@@ -1,19 +1,26 @@
 {
   "_meta": {
-    "verified": "2026-10-05",
+"verified": "2026-10-05 (refreshed twice same day: PR #1 merge, then immediately before PR 2)",
     "verified_by": "roadmap/scrape_inventory.ps1",
     "method": "chapter counts + titles from the book-wide Quarto sidebar TOC on a chapter page; license from the landing page CC badge; downloads confirmed by HTTP 200 + %PDF/PK magic bytes (host returns real 404s for unknown paths); GitHub repos confirmed by HTTP 200 against github.com/rsquaredacademy-education",
     "chapters_definition": "numbered sidebar TOC entries that point at a real page and are not a cheatsheet or appendix; appendices counted separately",
     "site_date": "not machine-verifiable - the sites expose no reliable build/last-updated meta, so the field is null rather than stale",
     "changes_from_2026_09_28": [
       "intro-r 10 -> 13 chapters (added RStudio Projects & Data Import, Your First Visualization, Your First Data Wrangling)",
-      "wrangle-r 10 -> 13 chapters + 3 appendices + ch14 Exercise Solutions; now HAS verified PDF + ePub (was 'NOT verified')",
-      "viz-ggplot2 14 -> 22 chapters + ch23 recipe cheat sheet; now HAS verified PDF + ePub (was 'NOT verified')",
+      "wrangle-r 10 -> 13 chapters + 3 appendices; now HAS verified PDF + ePub (was 'NOT verified')",
+      "viz-ggplot2 14 -> 22 chapters; now HAS verified PDF + ePub (was 'NOT verified')",
       "viz-base 11 -> 12 chapters; GitHub repo now linked from the site (was null)",
       "rdbsql 5 -> 5 chapters + DBI Cheat Sheet + 2 appendices; GitHub repo confirmed to exist (was null)",
       "bash-intro 11 -> 12 chapters + Shell-R cheat sheet + Git appendix",
       "all 6 books: GitHub repo now verified to exist at github.com/rsquaredacademy-education/<slug>",
       "all 6 books: CC BY-NC-SA 4.0 confirmed via creativecommons.org/licenses/by-nc-sa/4.0/"
+    ],
+    "changes_2026_10_05_later": [
+      "intro-r   gained PDF  Introduction-to-R.pdf (1,026,432 B) + ePub (711,094 B)",
+      "rdbsql    gained PDF  databases-and-sql.pdf (1,589,530 B) + ePub (904,605 B)",
+      "bash-intro gained PDF Command-Line-Basics-for-R-Users.pdf (1,691,794 B) + ePub (1,006,211 B)",
+      "ALL SIX books now have verified PDF + ePub builds. Caught by the Gate 0 pre-flight re-run of scrape_inventory.ps1, hours after the initial baseline was taken - the gate did its job.",
+      "NOTE: these filenames appeared during active editing and may be renamed again. Re-run the gate before any deploy that ships download links."
     ]
   },
   "books": [
@@ -44,8 +51,8 @@
       "prereq": null,
       "read": "https://intro-r.rsquaredacademy.com/",
       "github": "https://github.com/rsquaredacademy-education/intro-r",
-      "pdf": null,
-      "epub": null,
+      "pdf": "https://intro-r.rsquaredacademy.com/Introduction-to-R.pdf",
+      "epub": "https://intro-r.rsquaredacademy.com/Introduction-to-R.epub",
       "license": "CC BY-NC-SA 4.0",
       "site_date": null
     },
@@ -157,8 +164,8 @@
       "prereq": "02 Data Wrangling first - database users may take 04 right after 02",
       "read": "https://rdbsql.rsquaredacademy.com/",
       "github": "https://github.com/rsquaredacademy-education/rdbsql",
-      "pdf": null,
-      "epub": null,
+      "pdf": "https://rdbsql.rsquaredacademy.com/databases-and-sql.pdf",
+      "epub": "https://rdbsql.rsquaredacademy.com/databases-and-sql.epub",
       "cheatsheet": "https://rdbsql.rsquaredacademy.com/cheatsheet/dbi-cheatsheet.pdf",
       "license": "CC BY-NC-SA 4.0",
       "site_date": null
@@ -193,8 +200,8 @@
       "prereq": "None - take alongside 01. Windows users: RStudio Terminal / Git Bash / WSL",
       "read": "https://bash-intro.rsquaredacademy.com/",
       "github": "https://github.com/rsquaredacademy-education/bash-intro",
-      "pdf": null,
-      "epub": null,
+      "pdf": "https://bash-intro.rsquaredacademy.com/Command-Line-Basics-for-R-Users.pdf",
+      "epub": "https://bash-intro.rsquaredacademy.com/Command-Line-Basics-for-R-Users.epub",
       "license": "CC BY-NC-SA 4.0",
       "site_date": null
     },
