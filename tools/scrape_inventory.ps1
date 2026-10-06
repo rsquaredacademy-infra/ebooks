@@ -28,8 +28,8 @@
     Exit codes: 0 = no drift, 1 = drift, 2 = a site was unreachable.
 
 .EXAMPLE
-    pwsh roadmap/scrape_inventory.ps1
-    pwsh roadmap/scrape_inventory.ps1 -TimeoutSec 90 -Csv
+    pwsh tools/scrape_inventory.ps1
+    pwsh tools/scrape_inventory.ps1 -TimeoutSec 90 -Csv
 #>
 [CmdletBinding()]
 param(
@@ -40,7 +40,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$inventoryPath = Join-Path $PSScriptRoot 'books.json'
+$roadmapDir = Join-Path (Split-Path -Parent $PSScriptRoot) 'roadmap'
+$inventoryPath = Join-Path $roadmapDir 'books.json'
 if (-not (Test-Path -LiteralPath $inventoryPath)) { Write-Error "books.json not found at $inventoryPath" }
 $inventory = (Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json).books
 
@@ -213,7 +214,7 @@ foreach ($book in $inventory) {
 }
 
 Write-Host ''
-if ($Csv) { $rows | Export-Csv -NoTypeInformation -Path (Join-Path $PSScriptRoot 'scrape-report.csv'); Write-Host "csv -> roadmap/scrape-report.csv" }
+if ($Csv) { $rows | Export-Csv -NoTypeInformation -Path (Join-Path $roadmapDir 'scrape-report.csv'); Write-Host "csv -> roadmap/scrape-report.csv" }
 $rows | Format-Table -AutoSize | Out-String -Width 220 | Write-Host
 
 Write-Host ("drift fields      : {0}" -f $drift)
