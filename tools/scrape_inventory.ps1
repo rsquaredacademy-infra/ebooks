@@ -213,6 +213,45 @@ foreach ($book in $inventory) {
     }
 }
 
+# --- index.html <-> books.json -------------------------------------------
+# books.json certifies the asset URLs, but index.html hard-codes its own copies.
+# Nothing enforced that coupling, so refreshing books.json could silently desync
+# the page while the gate still passed - the one failure mode the gate exists to
+# catch. Compare both directions: a URL on the page that books.json does not
+# certify, and a certified URL the page has dropped.
+$indexPath = Join-Path (Split-Path -Parent $PSScriptRoot) 'index.html'
+if (Test-Path -LiteralPath $indexPath) {
+    $idx = Get-Content -Raw -LiteralPath $indexPath
+    $page = @{
+        downloads = @([regex]::Matches($idx, '<a class="abtn dl" href="([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+        reads     = @([regex]::Matches($idx, '<a class="abtn primary" href="([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+        github    = @([regex]::Matches($idx, 'href="(https://github\.com/rsquaredacademy-education/[^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+    }
+    $cert = @{
+        downloads = @($inventory | ForEach-Object { @($_.pdf, $_.epub, $_.cheatsheet) } | Where-Object { $_ })
+        reads     = @($inventory | ForEach-Object { $_.read } | Where-Object { $_ })
+        github    = @($inventory | ForEach-Object { $_.github } | Where-Object { $_ })
+    }
+    foreach ($k in @('downloads', 'reads', 'github')) {
+        foreach ($u in @($page[$k] | Sort-Object -Unique)) {
+            if ($u -notin $cert[$k]) {
+                $script:rows += [pscustomobject]@{ slug = 'index.html'; field = $k; inv = 'not in books.json'; live = $u; status = 'DRIFT' }
+                $script:drift++
+            }
+        }
+        foreach ($u in @($cert[$k] | Sort-Object -Unique)) {
+            if ($u -notin $page[$k]) {
+                $script:rows += [pscustomobject]@{ slug = 'index.html'; field = $k; inv = $u; live = 'not linked on the page'; status = 'DRIFT' }
+                $script:drift++
+            }
+        }
+    }
+    Write-Host ("index.html <-> books.json: {0} downloads, {1} reads, {2} repos compared both ways" -f $page.downloads.Count, $page.reads.Count, @($page.github | Sort-Object -Unique).Count)
+}
+else {
+    Write-Warning "index.html not found at $indexPath - skipping the page/inventory consistency check"
+}
+
 Write-Host ''
 if ($Csv) { $rows | Export-Csv -NoTypeInformation -Path (Join-Path $PSScriptRoot 'scrape-report.csv'); Write-Host "csv -> tools/scrape-report.csv" }
 $rows | Format-Table -AutoSize | Out-String -Width 220 | Write-Host

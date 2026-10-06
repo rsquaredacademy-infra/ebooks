@@ -1,0 +1,83 @@
+name: Inventory gate
+
+# Gate 0 - the re-runnable check that tools/books.json still matches the six live
+# book sites, and that index.html still links exactly what books.json certifies.
+#
+# This exists because the drift it catches has already happened once: c62b9dc
+# records that intro-r, rdbsql and bash-intro gained PDF/ePub builds hours after
+# the baseline was taken, and index.html hard-codes those thirteen download URLs.
+# A human remembered to re-run the gate before deploying; nothing made them.
+#
+# Caveat worth knowing: Netlify deploys on push to master independently of this
+# workflow, so a red run here does NOT block a deploy. To make it blocking, set
+# master to require this check in the repository's branch protection settings.
+# Until then it is advisory, not enforcing - it still pages you via the Actions
+# badge and email.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - index.html
+      - tools/**
+  pull_request:
+    paths:
+      - index.html
+      - tools/**
+  # The book sites change on their own schedule, not ours. Without this, a chapter
+  # added upstream would silently invalidate books.json until the next unrelated
+  # commit happened to run the gate.
+  schedule:
+    - cron: '23 5 * * 1'   # Mondays 05:23 UTC - off the hour to avoid the cron stampede
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: inventory-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: books.json vs live sites
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Gate 0
+        id: gate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Continue'
+          # Full run including the twelve PDF/ePub body fetches, since confirming
+          # the assets is the point. Takes ~55s.
+          pwsh tools/scrape_inventory.ps1 -TimeoutSec 90 -Csv
+          $code = $LASTEXITCODE
+          "exit_code=$code" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+          $summary = @()
+          $summary += "## Inventory gate`n"
+          # Single-quoted where no interpolation is needed: a backtick is the escape
+          # character inside a PowerShell double-quoted string, so markdown code
+          # spans written as `foo` there silently lose characters. Rendered as
+          # bold instead, which survives either quoting style.
+          switch ($code) {
+            0 { $summary += '**PASS** - books.json matches all six live book sites, and index.html links exactly what books.json certifies.' }
+            1 { $summary += "**DRIFT** - a book site changed, or index.html and books.json disagree.`n`nUpdate **tools/books.json** (and **index.html** if the URLs moved), commit, and re-run. The drift rows are in the step output and the **scrape-report.csv** artifact." }
+            2 { $summary += '**INCOMPLETE** - at least one book site could not be reached. Usually a transient network failure rather than real drift; re-run before acting.' }
+            default { $summary += "**ERROR** - the gate exited $code, which is not one of its documented codes (0 clean, 1 drift, 2 unreachable)." }
+          }
+          $summary -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          exit $code
+
+      - name: Publish scrape report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrape-report-${{ github.run_number }}
+          path: tools/scrape-report.csv
+          if-no-files-found: ignore
+          retention-days: 14
