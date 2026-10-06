@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+# Internal verification tooling (books.json + the Gate 0 script), tracked in the
+# repo so a fresh clone can re-run the inventory check but not site content.
+# /tools/* also sends X-Robots-Tag: noindex, which is what actually enforces this.
+Disallow: /tools/
+
 Sitemap: https://ebooks.rsquaredacademy.com/sitemap.xml

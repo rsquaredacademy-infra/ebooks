@@ -1,4 +1,60 @@
+# Netlify response headers for ebooks.rsquaredacademy.com
+#
+# Every directive below was derived from what index.html actually loads, not from
+# a boilerplate policy. The page has no external CSS, no external JS, no webfonts,
+# no <form>, no <iframe>, no fetch/XHR and no eval - the only subresources are
+# /favicon.ico and the GitHub avatar in the author block. That lets default-src be
+# 'none' and still leave the page fully functional.
+#
+# Netlify merges every matching rule, most-specific-path wins per header name.
 /*
+  # --- Transport ---
+  # 1 year. No `preload`: that is a hard-to-reverse commitment requiring
+  # registration at hstspreload.org, and it is an owner decision, not a default.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+  # --- Framing ---
+  # frame-ancestors is what modern browsers honour; X-Frame-Options is kept only
+  # for older agents, which ignore CSP and still read it.
+  Content-Security-Policy: default-src 'none'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; form-action 'none'; img-src 'self' https://github.com https://avatars.githubusercontent.com data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; font-src 'self'; manifest-src 'self'
   X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
+
+  # --- Sniffing ---
   X-Content-Type-Options: nosniff
+
+  # Replaces the old `X-XSS-Protection: 1; mode=block`. That header is ignored by
+  # every current browser and its legacy auditors were themselves exploitable, so
+  # 0 actively disables the buggy behaviour in any agent that still honours it.
+  # Keeping it at 0 rather than deleting it also stops scanners reading absence
+  # as an oversight.
+  X-XSS-Protection: 0
+
+  # --- Privacy / feature gating ---
+  # Sends the origin only on cross-origin requests. The roadmap flagged the
+  # avatar hotlink + referrer behaviour as untested; this is the answer to it -
+  # github.com learns the origin, not the full path, and no referrer is attached
+  # on a downgrade.
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+
+  # --- Caching ---
+  # Default is deliberately not cacheable: index.html is the whole site, and a
+  # cached copy would hide deploys. More specific paths below override this.
+  Cache-Control: public, max-age=0, must-revalidate
+
+/images/*
+  # Cover PNGs. They are not fingerprinted, so a long immutable cache would keep
+  # serving a stale og:image after a cover change. One week balances that against
+  # the fact that crawlers refetch social images often.
+  Cache-Control: public, max-age=604800
+
+/favicon.ico
+  Cache-Control: public, max-age=86400
+
+/tools/*
+  # Internal verification tooling, kept in the repo so Gate 0 can run from a fresh
+  # clone. It is public and harmless, but it is not site content and should not
+  # compete for the portal's search results. robots.txt carries a matching
+  # Disallow - the header is what actually keeps it out of the index.
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: public, max-age=0, must-revalidate
