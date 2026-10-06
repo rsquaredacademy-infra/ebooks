@@ -36,7 +36,7 @@ nav.top a.n{color:#cbd5e1;text-decoration:none;font-size:14px}nav.top a.n:hover{
 header.hero{background:radial-gradient(900px 320px at 20% -40px,#fed7aa,transparent),#0f172a;color:#fff;padding:56px 0 40px}
 .eyebrow{font:600 12px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.18em;color:#fdba74}
 h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,4.4vw,48px);line-height:1.1;margin:.4em 0 .3em}
-.sub{color:#cbd5e1;max-width:62ch}.stats{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.stats span{background:#1e293b;border:1px solid #334155;border-radius:999px;padding:5px 12px;font-size:13px;color:#e2e8f0}
+.sub{color:#cbd5e1;max-width:62ch}.hero .sub a{color:#fff;text-decoration:underline}.stats{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.stats span{background:#1e293b;border:1px solid #334155;border-radius:999px;padding:5px 12px;font-size:13px;color:#e2e8f0}
 .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.btn{display:inline-block;padding:11px 18px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px}
 .btn-p{background:var(--accent);color:#fff}.btn-g{background:transparent;color:#fff;border:1px solid #475569}
 section{padding:34px 0;scroll-margin-top:62px}h2{font-family:Georgia,serif;font-size:26px;margin:0 0 6px}.lede{color:var(--muted);max-width:70ch;margin:0 0 18px}
@@ -57,7 +57,7 @@ section{padding:34px 0;scroll-margin-top:62px}h2{font-family:Georgia,serif;font-
 .card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(2,6,23,.12)}
 .cover{aspect-ratio:3/4;width:100%;display:block}
 .body{padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
-.track{font:700 11px ui-monospace,monospace;letter-spacing:.14em;color:var(--accent)}.track.c{color:#b45309}.track.d{color:#0e7490}
+.track{font:700 11px ui-monospace,monospace;letter-spacing:.14em;color:var(--accent)}.track.ca{color:#b45309}.track.cb{color:#0e7490}
 .body h3{margin:0;font-family:Georgia,serif;font-size:19px}.out{margin:0;font-size:14px;color:var(--muted)}
 .meta{font-size:12.5px;color:#64748b}.prereq{font-size:12.5px;color:#075985;background:#f0f9ff;border:1px solid #e0f2fe;border-radius:8px;padding:5px 8px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
@@ -93,7 +93,7 @@ footer{padding:26px 0 40px;color:#64748b;font-size:13px}footer a{color:#475569}
 <header class="hero"><div class="wrap">
 <div class="eyebrow">RSQUARED ACADEMY • OPEN TEXTBOOK SERIES</div>
 <h1>Open Access R Books</h1>
-<p class="sub">Six open-access textbooks that power the courses at Rsquared Academy — from your first R script to wrangling, visualization, databases, and the command line. Fully reproducible code + data. CC BY-NC-SA.</p>
+<p class="sub">Six open-access textbooks authored by <a href="https://www.aravindhebbali.com" target="_blank" rel="noopener">Aravind Hebbali</a> — from your first R script to wrangling, visualization, databases, and the command line. Fully reproducible code + data. CC BY-NC-SA.</p>
 <div class="stats"><span>6 books</span><span>Core Track 01–04 + 2 Companions</span><span>R • dplyr • ggplot2 • SQL • Bash</span><span>Beginner → Intermediate</span><span>Free online • Open Access</span></div>
 <div class="cta"><a class="btn btn-p" href="https://intro-r.rsquaredacademy.com/" target="_blank" rel="noopener">Start with Intro to R →</a><a class="btn btn-g" href="#library">Browse the library ↓</a></div>
 </div></header>
@@ -154,14 +154,14 @@ footer{padding:26px 0 40px;color:#64748b;font-size:13px}footer a{color:#475569}
 
 <!-- CARD C-A Bash -->
 <article class="card"><svg class="cover" viewBox="0 0 300 400" role="img" aria-labelledby="cvca"><title id="cvca">Command Line Basics — Rsquared Academy Companion A</title><use href="#cover-ca"/></svg>
-<div class="body"><span class="trackca">COMPANION A</span><h3>Command Line Basics</h3><p class="out">Files, permissions, pipes and scripting — enough shell for R users. Windows path: RStudio Terminal, Git Bash or WSL.</p><div class="meta">12 chapters • Beginner</div><p class="prereq">No prerequisites. Take alongside Core 01.</p><div class="actions"><a class="abtn primary" href="https://bash-intro.rsquaredacademy.com/" target="_blank" rel="noopener">Read free online →</a>
+<div class="body"><span class="track ca">COMPANION A</span><h3>Command Line Basics</h3><p class="out">Files, permissions, pipes and scripting — enough shell for R users. Windows path: RStudio Terminal, Git Bash or WSL.</p><div class="meta">12 chapters • Beginner</div><p class="prereq">No prerequisites. Take alongside Core 01.</p><div class="actions"><a class="abtn primary" href="https://bash-intro.rsquaredacademy.com/" target="_blank" rel="noopener">Read free online →</a>
 <a class="abtn dl" href="https://bash-intro.rsquaredacademy.com/Command-Line-Basics-for-R-Users.pdf">PDF</a>
 <a class="abtn dl" href="https://bash-intro.rsquaredacademy.com/Command-Line-Basics-for-R-Users.epub">ePub</a>
 <a class="abtn" href="https://github.com/rsquaredacademy-education/bash-intro" target="_blank" rel="noopener">GitHub</a></div><details><summary>What’s inside</summary><p class="cap">12 chapters, plus a shell cheat sheet and a Git primer</p><ul><li>Introduction</li><li>Navigating File System</li><li>File Management</li><li>Input/Output</li><li>Search &amp; Regular Expression</li><li>Data Transfer</li><li>sudo</li><li>File Compression</li><li>System Info</li><li>R &amp; the Shell</li><li>Pipes &amp; Redirection</li><li>Conclusion</li></ul><p class="extras">Also: chapter 13 Shell ↔ R Cheat Sheet · chapter 14 Git in 10 Minutes for RStudio Users.</p></details></div></article>
 
 <!-- CARD C-B Base -->
 <article class="card"><svg class="cover" viewBox="0 0 300 400" role="img" aria-labelledby="cvcb"><title id="cvcb">Data Visualization with Base R — Rsquared Academy Companion B</title><use href="#cover-cb"/></svg>
-<div class="body"><span class="trackcb">COMPANION B</span><h3>Data Visualization with Base R</h3><p class="out">The base graphics engine: parameters, multi-panel layouts and production export. Zero dependencies.</p><div class="meta">12 chapters • Intermediate</div><p class="prereq">After Core 03 if you need fine-grained canvas control. Requires R 4.1+.</p><div class="actions"><a class="abtn primary" href="https://viz-base.rsquaredacademy.com/" target="_blank" rel="noopener">Read free online →</a>
+<div class="body"><span class="track cb">COMPANION B</span><h3>Data Visualization with Base R</h3><p class="out">The base graphics engine: parameters, multi-panel layouts and production export. Zero dependencies.</p><div class="meta">12 chapters • Intermediate</div><p class="prereq">After Core 03 if you need fine-grained canvas control. Requires R 4.1+.</p><div class="actions"><a class="abtn primary" href="https://viz-base.rsquaredacademy.com/" target="_blank" rel="noopener">Read free online →</a>
 <a class="abtn dl" href="https://viz-base.rsquaredacademy.com/Data-Visualization-with-R.pdf">PDF</a>
 <a class="abtn dl" href="https://viz-base.rsquaredacademy.com/Data-Visualization-with-R.epub">ePub</a>
 <a class="abtn" href="https://github.com/rsquaredacademy-education/viz-base" target="_blank" rel="noopener">GitHub</a></div><details><summary>What’s inside</summary><p class="cap">12 chapters, plus a Rosetta Stone appendix</p><ul><li>Why Base R Graphics in 2026?</li><li>Introduction</li><li>Title &amp; Axis Labels</li><li>Scatter Plots</li><li>Line Graphs</li><li>Bar Plots</li><li>Box Plots</li><li>Histograms</li><li>Legends</li><li>Text Annotations</li><li>Faceting</li><li>Production Export &amp; Graphical Devices</li></ul><p class="extras">Also: Appendix A Base R ↔ ggplot2 — a Rosetta Stone · References.</p></details></div></article>
