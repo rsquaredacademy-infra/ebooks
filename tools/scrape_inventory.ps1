@@ -3,7 +3,7 @@
     Re-runnable, read-only verification of the P1 content inventory.
 
 .DESCRIPTION
-    Scrapes the 6 live book sites and diffs the facts against roadmap/books.json.
+    Scrapes the 6 live book sites and diffs the facts against tools/books.json.
     Read-only: never writes books.json or inventory.md.
 
     Satisfies roadmap.md:161 - "Scrape (scripted, re-runnable) true chapter
@@ -40,8 +40,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$roadmapDir = Join-Path (Split-Path -Parent $PSScriptRoot) 'roadmap'
-$inventoryPath = Join-Path $roadmapDir 'books.json'
+# Lives beside this script, and is tracked, so the gate works on a fresh clone.
+$inventoryPath = Join-Path $PSScriptRoot 'books.json'
 if (-not (Test-Path -LiteralPath $inventoryPath)) { Write-Error "books.json not found at $inventoryPath" }
 $inventory = (Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json).books
 
@@ -214,7 +214,7 @@ foreach ($book in $inventory) {
 }
 
 Write-Host ''
-if ($Csv) { $rows | Export-Csv -NoTypeInformation -Path (Join-Path $roadmapDir 'scrape-report.csv'); Write-Host "csv -> roadmap/scrape-report.csv" }
+if ($Csv) { $rows | Export-Csv -NoTypeInformation -Path (Join-Path $PSScriptRoot 'scrape-report.csv'); Write-Host "csv -> tools/scrape-report.csv" }
 $rows | Format-Table -AutoSize | Out-String -Width 220 | Write-Host
 
 Write-Host ("drift fields      : {0}" -f $drift)
