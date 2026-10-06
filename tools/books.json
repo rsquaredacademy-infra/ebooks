@@ -1,7 +1,7 @@
 {
   "_meta": {
 "verified": "2026-10-05 (refreshed twice same day: PR #1 merge, then immediately before PR 2)",
-    "verified_by": "roadmap/scrape_inventory.ps1",
+    "verified_by": "tools/scrape_inventory.ps1",
     "method": "chapter counts + titles from the book-wide Quarto sidebar TOC on a chapter page; license from the landing page CC badge; downloads confirmed by HTTP 200 + %PDF/PK magic bytes (host returns real 404s for unknown paths); GitHub repos confirmed by HTTP 200 against github.com/rsquaredacademy-education",
     "chapters_definition": "numbered sidebar TOC entries that point at a real page and are not a cheatsheet or appendix; appendices counted separately",
     "site_date": "not machine-verifiable - the sites expose no reliable build/last-updated meta, so the field is null rather than stale",
