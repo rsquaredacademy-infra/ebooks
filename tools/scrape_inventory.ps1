@@ -90,7 +90,7 @@ function Get-BookFacts {
         else { 'NOT FOUND' }
 
     # ---- github ----------------------------------------------------------
-    $gh = @([regex]::Matches($landingPage.Content, 'https://github\.com/rsquaredacademy-education/[A-Za-z0-9._\-]+') |
+    $gh = @([regex]::Matches($landingPage.Content, 'https://github\.com/rsquaredacademy-publications/[A-Za-z0-9._\-]+') |
         ForEach-Object { $_.Value } | Sort-Object -Unique)
 
     # ---- download menu (inside the sidebar, so on the chapter page) --------
@@ -169,10 +169,10 @@ foreach ($book in $inventory) {
     # --- github ----------------------------------------------------------
     # A repo may exist without being linked from the landing page, so probe the
     # canonical org URL as a fallback rather than reporting a false drift.
-    $gh = @([regex]::Matches($landingPage.Content, 'https://github\.com/rsquaredacademy-education/[A-Za-z0-9._\-]+') |
+    $gh = @([regex]::Matches($landingPage.Content, 'https://github\.com/rsquaredacademy-publications/[A-Za-z0-9._\-]+') |
         ForEach-Object { $_.Value } | Sort-Object -Unique)
     $linkedOnSite = $gh.Count -gt 0
-    $probeRepo = "https://github.com/rsquaredacademy-education/$($book.slug)"
+    $probeRepo = "https://github.com/rsquaredacademy-publications/$($book.slug)"
     $repoExists = $false
     try { $null = Invoke-WebRequest -Uri $probeRepo -Method Head -UseBasicParsing -TimeoutSec 30; $repoExists = $true } catch { }
     $liveGh = if ($linkedOnSite) { $gh[0] } elseif ($repoExists) { $probeRepo } else { $null }
@@ -225,7 +225,7 @@ if (Test-Path -LiteralPath $indexPath) {
     $page = @{
         downloads = @([regex]::Matches($idx, '<a class="abtn dl" href="([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
         reads     = @([regex]::Matches($idx, '<a class="abtn primary" href="([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
-        github    = @([regex]::Matches($idx, 'href="(https://github\.com/rsquaredacademy-education/[^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+        github    = @([regex]::Matches($idx, 'href="(https://github\.com/rsquaredacademy-publications/[^"]+)"') | ForEach-Object { $_.Groups[1].Value })
     }
     $cert = @{
         downloads = @($inventory | ForEach-Object { @($_.pdf, $_.epub, $_.cheatsheet) } | Where-Object { $_ })
