@@ -1,0 +1,6 @@
+# Repository files that are not part of the public site.
+/README.md   /404.html   404!
+/AGENTS.md   /404.html   404!
+/CLAUDE.md   /404.html   404!
+/GEMINI.md   /404.html   404!
+/tools/*     /404.html   404!
